@@ -1,0 +1,27 @@
+{
+  "name": "topolr-module-util",
+  "version": "0.0.1",
+  "description": "topolr frontend util",
+  "main": "index.js",
+  "scripts": {
+    "test": "node test.js"
+  },
+  "topolr":{
+    "basePath":"./com/topolr/"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/topolr/topolr-module-util.git"
+  },
+  "keywords": [
+    "topolr",
+    "module",
+    "util"
+  ],
+  "author": "hou80houzhu",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/topolr/topolr-module-util/issues"
+  },
+  "homepage": "https://github.com/topolr/topolr-module-util#readme"
+}
