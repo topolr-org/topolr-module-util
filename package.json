@@ -1,6 +1,6 @@
 {
   "name": "topolr-module-util",
-  "version": "0.0.1",
+  "version": "0.0.2",
   "description": "topolr frontend util",
   "main": "index.js",
   "scripts": {
