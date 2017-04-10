@@ -284,11 +284,11 @@ file.prototype.compressImage = function (quality) {
     return ps;
 };
 file.prototype.createImageCanvas = function (width, height) {
-    var ps = promise();
+    var ps = $.promise();
     if (this.file.type.indexOf("image") !== -1) {
         var a=this.getFileURL();
         var image = document.createElement("img");
-        $(image).load(function () {
+        $(image).bind("load",function () {
             try {
                 var _width = image.width, _height = image.height;
                 var _w = 0, _h = 0;
@@ -352,7 +352,7 @@ file.prototype.createImageCanvas = function (width, height) {
                     element:null
                 });
             }
-        }).error(function (a) {
+        }).bind("error",function (a) {
             ps.reject({
                 uri:a,
                 element:null
