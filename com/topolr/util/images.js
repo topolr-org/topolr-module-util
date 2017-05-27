@@ -60,16 +60,14 @@ Module({
                 },
                 success: function (data) {
                     ths.dom.find(".imageuploader-progress").width(0);
-                    fn && fn(data.data);
+                    fn && fn(data);
                 }
             });
         } else {
-            this.postRequest(this.option.url, data).data(function (a) {
+            this.postRequest(this.option.url, data).then(function (a) {
                 fn && fn(a);
-            }).bad(function () {
-                error && error();
-            }).error(function () {
-                error && error();
+            },function (a) {
+                error && error(a);
             });
         }
     }
