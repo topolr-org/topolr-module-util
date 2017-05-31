@@ -139,10 +139,11 @@ var _history = function (url) {
 _history._run = function (data, e) {
     if (!data) {
         data = {
-            __page__: window.location.href.substring(this.url.length),
+            __page__: window.location.href.split("#")[0].substring(this.url.length),
             __index__: 0
         };
     }
+    data.__page__=data.__page__.split("?")[0];
     if (data.__page__ === "") {
         data.__page__ = "index";
     } else {
