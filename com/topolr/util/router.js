@@ -57,7 +57,7 @@ var router = {
         var result = {
             found: false,
             hasParas: false,
-            path: "",
+            path: path,
             matchpath: "",
             map: {},
             query: $.serialize.queryObject(path),
@@ -120,6 +120,7 @@ var router = {
 };
 var __history = null;
 var _history = function (url) {
+    var ths = this;
     if (url) {
         if (url[url - 1] === "/") {
             url = url.substring(0, url.length - 1);
@@ -128,36 +129,28 @@ var _history = function (url) {
     }
     this._stack = [1];
     this._currentIndex = 0;
-    var ths = this;
-    router.add("404", function () {
-        console.log("[bright] router no page.");
-    });
+    this._handler = {};
     agent.onChange(function (e) {
         _history._run.call(ths, e.state, e);
     });
 };
 _history._run = function (data, e) {
-    if (!data) {
-        data = {
-            __page__: window.location.href.split("#")[0].substring(this.url.length),
-            __index__: 0
-        };
-    }
-    data.__page__=data.__page__.split("?")[0];
-    if (data.__page__ === "") {
-        data.__page__ = "index";
-    } else {
-        if (data.__page__[data.__page__.length - 1] === "/") {
-            data.__page__ = data.__page__.substring(data.__page__.length - 1);
+    try {
+        if (!data) {
+            data = {
+                __page__: window.location.href.split("#")[0].substring(this.url.length),
+                __index__: 0
+            };
         }
-    }
-    var r = router.check(data.__page__), isback = false, isforward = false;
-    if (!r.found) {
-        r = router.check("404");
-        this.edit("404");
-        return;
-    }
-    if (r.found) {
+        data.__page__ = data.__page__.split("?")[0];
+        if (data.__page__ === "") {
+            data.__page__ = "index";
+        } else {
+            if (data.__page__[data.__page__.length - 1] === "/") {
+                data.__page__ = data.__page__.substring(data.__page__.length - 1);
+            }
+        }
+        var r = router.check(data.__page__), isback = false, isforward = false;
         var info = {};
         if (e) {
             $.extend(data, e.state);
@@ -176,16 +169,36 @@ _history._run = function (data, e) {
                 info[i] = data[i];
             }
         }
-        r.callback && r.callback.call(this, {
+        var _pdata = {
+            founded: r.found,
             action: r.path,
+            path:r.path,
             back: isback,
             forward: isforward,
             keys: r.hasParas ? r.map : null,
             query: r.query,
             hash: r.hash,
             info: info,
-            e: e === undefined ? null : e
-        });
+            e: e === undefined ? null : e,
+            baseInfo: r
+        };
+        var _cannext = true;
+        if (this._handler.beforeopen) {
+            var r = this._handler.beforeopen.call(this, _pdata);
+            if (r === false) {
+                _cannext = false;
+            }
+        }
+        if (r.found) {
+            if (_cannext) {
+                r.callback && r.callback.call(this, _pdata);
+            }
+            this._handler.endopen && this._handler.endopen.call(this, _pdata);
+        } else {
+            this._handler.nofound && this._handler.nofound.call(this, _pdata);
+        }
+    } catch (e) {
+        console.log(e);
     }
 };
 _history.prototype.run = function () {
@@ -225,8 +238,12 @@ _history.prototype.bind = function (obj, fn) {
     }
     return this;
 };
+_history.prototype.watch = function (type, fn) {
+    this._handler[type] = fn;
+    return this;
+};
 
-module.exports=function (option) {
+module.exports = function (option) {
     if (!__history) {
         __history = new _history(option);
     }
