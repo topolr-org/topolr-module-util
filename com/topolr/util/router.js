@@ -136,7 +136,7 @@ var _history = function (url) {
 };
 _history._run = function (data, e) {
     try {
-        if (!data) {
+        if (!data||$.is.isEmptyObject(data)) {
             data = {
                 __page__: window.location.href.split("#")[0].substring(this.url.length),
                 __index__: 0
