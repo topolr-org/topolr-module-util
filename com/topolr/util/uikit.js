@@ -12,7 +12,7 @@ $.toast = function (text) {
         this.transition().removeAll().set("opacity", {time: 1000}).delay(2000).then(function () {
             this.css("opacity", 0);
         }).delay(1000).done(function () {
-            // this.remove();
+            this.remove();
         }).resolve();
     }).scope().transform().y(-250);
 };
