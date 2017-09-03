@@ -1,6 +1,7 @@
 /**
  * @packet util.uikit;
  * @css util.style.uikit;
+ * @icon util.icons;
  */
 $.showDate = function (time) {
     var a = new Date(parseInt(time));
@@ -29,7 +30,7 @@ var loadingbar = function (dom) {
     this.dom = dom;
 };
 loadingbar.prototype.showLoading = function (text) {
-    this.dom.children(1).html("<i class='fa fa-repeat fa-spin'></i> " + (text || 'Loading...'));
+    this.dom.children(1).html("<svg class='t-icon t-icon-spin'><use xlink:href='#t-icon-autorenew'></use></svg> " + (text || 'Loading...'));
     return this;
 };
 loadingbar.prototype.showError = function (text) {
@@ -38,7 +39,7 @@ loadingbar.prototype.showError = function (text) {
         ths.close();
         ps.resolve();
     }, 2000);
-    this.dom.children(1).html("<i class='fa fa-circle-cross'></i> " + (text || '操作错误'));
+    this.dom.children(1).html("<svg class='t-icon'><use xlink:href='#t-icon-error'></use></svg> " + (text || '操作错误'));
     return ps;
 };
 loadingbar.prototype.showSuccess = function (text) {
@@ -47,7 +48,7 @@ loadingbar.prototype.showSuccess = function (text) {
         ths.close();
         ps.resolve();
     }, 2000);
-    this.dom.children(1).html("<i class='fa fa-circle-check'></i> " + (text || '操作成功'));
+    this.dom.children(1).html("<svg class='t-icon'><use xlink:href='#t-icon-check_circle'></use></svg>> " + (text || '操作成功'));
     return ps;
 };
 loadingbar.prototype.close = function () {
